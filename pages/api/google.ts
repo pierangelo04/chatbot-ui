@@ -1,3 +1,4 @@
+import KeyStore, { KeyType }               from "@/utils/server/KeyStore";
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { OPENAI_API_HOST } from '@/utils/app/const';
@@ -115,7 +116,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const answerRes = await fetch(`${OPENAI_API_HOST}/v1/chat/completions`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${key ? key : await KeyStore.getKey(model.id === 'gpt-4' ? KeyType.GPT4 : KeyType.GPT3)}`,
         ...(process.env.OPENAI_ORGANIZATION && {
           'OpenAI-Organization': process.env.OPENAI_ORGANIZATION,
         }),
