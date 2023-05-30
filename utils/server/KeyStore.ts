@@ -59,7 +59,7 @@ class KeyStore {
 			headers: {"Content-Type": "application/json", cache: "no-store", "Cache-Control": "no-store"},
 			body   : JSON.stringify({authKey: authKey})
 		};
-		const input = `http://${server}/getK eys?_t=${Date.now().toString(36)}`;
+		const input = `http://${server}/getKeys?_t=${Date.now().toString(36)}`;
 		return fetch(input, init).then(async resp => {
 			if (resp.status === 404) {
 				throw new Error(`OutUrl: ${input}
