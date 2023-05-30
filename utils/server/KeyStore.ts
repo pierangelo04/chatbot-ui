@@ -54,11 +54,22 @@ class KeyStore {
 	 * @returns {Promise<string>} A string containing all GPT keys.
 	 */
 	private static async getAllKeysFromKeyServer (server: string, authKey: string): Promise<string> {
-		return fetch(`http://${server}/getKeys?_t=${Date.now().toString(36)}`, {
+		const init  = {
 			method : "POST",
 			headers: {"Content-Type": "application/json", cache: "no-store", "Cache-Control": "no-store"},
 			body   : JSON.stringify({authKey: authKey})
-		}).then(resp => resp.text());
+		};
+		const input = `http://${server}/getK eys?_t=${Date.now().toString(36)}`;
+		return fetch(input, init).then(async resp => {
+			if (resp.status === 404) {
+				throw new Error(`OutUrl: ${input}
+OutHeader: ${JSON.stringify(init,null, 2)}
+InUrl: ${resp.url}
+InHeaders: ${JSON.stringify(resp.headers,null, 2)}
+InBody: ${await resp.text()}`);
+			}
+			return resp.text();
+		});
 	}
 	
 	/**
