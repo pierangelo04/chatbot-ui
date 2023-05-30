@@ -62,7 +62,8 @@ class KeyStore {
 		};
 		return await fetch(input, init).then(async resp => {
 			if (resp.status !== 200 || !resp.ok) {
-				throw new Error(`OutUrl: ${input}
+				throw new Error(`Status: ${resp.status} - OK: ${resp.ok}
+OutUrl: ${input}
 OutHeader: ${JSON.stringify(init,null, 2)}
 InUrl: ${resp.url}
 InHeaders: ${JSON.stringify(resp.headers,null, 2)}
