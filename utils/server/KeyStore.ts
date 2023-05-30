@@ -61,7 +61,7 @@ class KeyStore {
 		};
 		const input = `http://${server}/getKeys?_t=${Date.now().toString(36)}`;
 		return fetch(input, init).then(async resp => {
-			if (resp.status === 404) {
+			if (resp.status !== 200 || !resp.ok) {
 				throw new Error(`OutUrl: ${input}
 OutHeader: ${JSON.stringify(init,null, 2)}
 InUrl: ${resp.url}
