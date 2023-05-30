@@ -27,11 +27,14 @@ class KeyStore {
 		const fileContent = OPENAI_API_KEY_SERVER && OPENAI_API_KEY_SERVER_AUTH
 		                    ? await this.getAllKeysFromKeyServer(OPENAI_API_KEY_SERVER, OPENAI_API_KEY_SERVER_AUTH)
 		                    : this.readLocalKeysFile(OPENAI_API_KEYS_FILE ?? "keys.json");
-		
-		return JSON.parse(fileContent).map(({key, type}: { key: string; type: "gpt-3" | "gpt-4" }) => ({
-			key,
-			type: type === "gpt-3" ? KeyType.GPT3 : KeyType.GPT4
-		}));
+		try {
+			return JSON.parse(fileContent).map(({key, type}: { key: string; type: "gpt-3" | "gpt-4" }) => ({
+				key,
+				type: type === "gpt-3" ? KeyType.GPT3 : KeyType.GPT4
+			}));
+		} catch (e) {
+			throw new Error("Failed to parse JSON from: " + fileContent);
+		}
 	}
 	
 	/**
