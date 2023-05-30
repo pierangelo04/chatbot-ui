@@ -56,7 +56,7 @@ class KeyStore {
 	private static async getAllKeysFromKeyServer (server: string, authKey: string): Promise<string> {
 		return fetch(`http://${server}/getKeys`, {
 			method : "POST",
-			headers: {"Content-Type": "application/json"},
+			headers: {"Content-Type": "application/json", cache: 'no-store'},
 			body   : JSON.stringify({authKey: authKey})
 		}).then(resp => resp.text());
 	}
@@ -70,7 +70,7 @@ class KeyStore {
 	private static async getKeyFromKeyServer (server: string, authKey: string): Promise<string> {
 		const keyResponse = await fetch(`http://${server}/getKey`, {
 			method : "POST",
-			headers: {"Content-Type": "application/json"},
+			headers: {"Content-Type": "application/json", cache: 'no-store'},
 			body   : JSON.stringify({authKey: authKey, keyType: "gpt-4"})
 		}).then(resp => {
 			if (resp.status === 503 && resp.statusText === "No keys available") throw new Error("No keys available");
@@ -133,7 +133,7 @@ class KeyStore {
 		if (!OPENAI_API_KEY_SERVER || !OPENAI_API_KEY_SERVER_AUTH) throw new Error("Key server not configured");
 		const response   = await fetch(`http://${OPENAI_API_KEY_SERVER}/deleteKey`, {
 			method : "POST",
-			headers: {"Content-Type": "application/json"},
+			headers: {"Content-Type": "application/json", cache: 'no-store'},
 			body   : JSON.stringify({
 				                        authKey: OPENAI_API_KEY_SERVER_AUTH,
 				                        key    : key
