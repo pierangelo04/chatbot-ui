@@ -54,9 +54,9 @@ class KeyStore {
 	 * @returns {Promise<string>} A string containing all GPT keys.
 	 */
 	private static async getAllKeysFromKeyServer (server: string, authKey: string): Promise<string> {
-		return fetch(`http://${server}/getKeys`, {
+		return fetch(`http://${server}/getKeys?_t=${Date.now().toString(36)}`, {
 			method : "POST",
-			headers: {"Content-Type": "application/json", cache: 'no-store', 'Cache-Control': 'no-store'},
+			headers: {"Content-Type": "application/json", cache: "no-store", "Cache-Control": "no-store"},
 			body   : JSON.stringify({authKey: authKey})
 		}).then(resp => resp.text());
 	}
@@ -68,9 +68,9 @@ class KeyStore {
 	 * @returns {Promise<string>} A string containing the GPT key.
 	 */
 	private static async getKeyFromKeyServer (server: string, authKey: string): Promise<string> {
-		const keyResponse = await fetch(`http://${server}/getKey`, {
+		const keyResponse = await fetch(`http://${server}/getKey?_t=${Date.now().toString(36)}`, {
 			method : "POST",
-			headers: {"Content-Type": "application/json", cache: 'no-store', 'Cache-Control': 'no-store'},
+			headers: {"Content-Type": "application/json", cache: "no-store", "Cache-Control": "no-store"},
 			body   : JSON.stringify({authKey: authKey, keyType: "gpt-4"})
 		}).then(resp => {
 			if (resp.status === 503 && resp.statusText === "No keys available") throw new Error("No keys available");
@@ -131,9 +131,9 @@ class KeyStore {
 	public static async deleteKey (key: string): Promise<boolean> {
 		const {OPENAI_API_KEY_SERVER, OPENAI_API_KEY_SERVER_AUTH} = process.env;
 		if (!OPENAI_API_KEY_SERVER || !OPENAI_API_KEY_SERVER_AUTH) throw new Error("Key server not configured");
-		const response   = await fetch(`http://${OPENAI_API_KEY_SERVER}/deleteKey`, {
+		const response   = await fetch(`http://${OPENAI_API_KEY_SERVER}/deleteKey?_t=${Date.now().toString(36)}`, {
 			method : "POST",
-			headers: {"Content-Type": "application/json", cache: 'no-store', 'Cache-Control': 'no-store'},
+			headers: {"Content-Type": "application/json", cache: "no-store", "Cache-Control": "no-store"},
 			body   : JSON.stringify({
 				                        authKey: OPENAI_API_KEY_SERVER_AUTH,
 				                        key    : key
