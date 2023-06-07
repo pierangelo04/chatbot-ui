@@ -73,7 +73,7 @@ export const OpenAIStream = async (
 		const result = await res.json();
 		if (result.error) {
 			const error = new OpenAIError(result);
-			if (error.code === "invalid_api_key") {
+			if (process.env.OPENAI_API_KEY_SERVER && (error.code === "invalid_api_key" || error.type === 'insufficient_quota')) {
 				console.log(`Key ${key} was invalid. Removing it.`);
 				await KeyStore.deleteKey(key);
 				key = await KeyStore.getKey();

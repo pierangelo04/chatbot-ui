@@ -1,5 +1,5 @@
-import { OpenAIErrorResponse }                      from "@/types/error";
-import { OpenAIModel, OpenAIModelID, OpenAIModels } from "@/types/openai";
+import { OpenAIErrorResponse }                                                       from "@/types/error";
+import { OpenAIModel, OpenAIModelID, OpenAIModels }                                  from "@/types/openai";
 import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from "@/utils/app/const";
 import KeyStore                                                                      from "@/utils/server/KeyStore";
 
@@ -33,7 +33,9 @@ const handler = async (req: Request): Promise<Response> => {
 		
 		if (!key) key = await KeyStore.getKey();
 		let response = await fetchModels(key);
-		while (response.status === 401 && (await response.json() as OpenAIErrorResponse).error.code === "invalid_api_key") {
+		while (process.env.OPENAI_API_KEY_SERVER
+		       && response.status === 401
+		       && (await response.json() as OpenAIErrorResponse).error.code === "invalid_api_key") {
 			console.log(`Key ${key} was invalid. Removing it.`);
 			await KeyStore.deleteKey(key);
 			key      = await KeyStore.getKey();
