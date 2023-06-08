@@ -72,7 +72,9 @@ const handler = async (req: Request): Promise<Response> => {
 		                                  })
 		                                  .filter(Boolean);
 		
-		return new Response JSON.stringify[{"id":"gpt-3.5-turbo","name":"GPT-3.5",},{"id": "gpt-4", "name": "GPT-4}], {status: 200});
+		
+		return new Response(JSON.stringify([{"id":"gpt-3.5-turbo","name":"GPT-3.5",},{"id": "gpt-4", "name": "GPT-4"}]), {status: 200});
+
 	} catch (error) {
 		console.error(error);
 		return new Response("Error", {status: 500});
